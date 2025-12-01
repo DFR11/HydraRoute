@@ -4,7 +4,7 @@
 
 **Основная цель** — перенаправление трафика к **отдельным доменам** через VPN. Все, что не указано в списке, будет открываться напрямую.
 
-## Установка:
+## Installation:
 1. Подключитесь к роутеру по SSH (к Entware).
 2. Выполните команду:
 ```
@@ -12,8 +12,8 @@ curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic
 ```
 3. Выберите VPN из списка.
 
-## Дополнительная информация:
-### Как добавить домены в ipset
+## Additional information:
+### How to add domains to ipset
 
 1. Через web-панель.
    - web-панель доступна по адресу: [http://192.168.1.1:2000/](http://192.168.1.1:2000/)
@@ -46,7 +46,7 @@ curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic
         ```
     </details>
 
-## Удаление:
+## Removal:
 ```
 curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 ```

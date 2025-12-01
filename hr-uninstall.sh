@@ -3,7 +3,7 @@
 cd /tmp
 
 LOG="/opt/var/log/HydraRoute.log"
-printf "\n%s Удаление\n" "$(date "+%Y-%m-%d %H:%M:%S")" > "$LOG" 2>&1
+printf "\n%s Delete\n" "$(date "+%Y-%m-%d %H:%M:%S")" > "$LOG" 2>&1
 
 animation() {
 	local pid="$1"
@@ -17,7 +17,7 @@ animation() {
 		i=$((i + 1))
 		usleep 100000
 	done
-	printf "\b✔ Готово!\n"
+	printf "\b✔ Done!\n"
 }
 
 opkg_uninstall() {
@@ -86,19 +86,19 @@ dns_on() {
 }
 
 opkg_uninstall >>"$LOG" 2>&1 &
-animation $! "Удаление opkg пакетов"
+animation $! "Removing opkg packages"
 
 policy_uninstall >>"$LOG" 2>&1 &
-animation $! "Удаление политик HydraRoute"
+animation $! "Removing HydraRoute policies"
 
 files_uninstall >>"$LOG" 2>&1 &
-animation $! "Удаление файлов, созданных HydraRoute"
+animation $! "Deleting files created by HydraRoute"
 
 dns_on >>"$LOG" 2>&1 &
-animation $! "Включение системного DNS сервера"
+animation $! "Enabling the system DNS server"
 
-echo "Удаление завершено (╥_╥)"
-echo "Перезагрузка через 5 секунд..."
+echo "Removal completed (╥_╥)"
+echo "Reboot in 5 seconds..."
 
 SCRIPT_PATH="$(readlink -f "$0" 2>/dev/null)"
 if [ -n "$SCRIPT_PATH" ] && [ -f "$SCRIPT_PATH" ]; then

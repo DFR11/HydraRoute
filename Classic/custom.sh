@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Служебные функции и переменные
+# Utility functions and variables
 LOG="/opt/var/log/HydraRoute.log"
-echo "$(date "+%Y-%m-%d %H:%M:%S") Запуск установки КОСТЫЛЯ" >> "$LOG"
+echo "$(date "+%Y-%m-%d %H:%M:%S") Starting the CRUTCH installation" >> "$LOG"
 
-## анимация
+## animation
 animation() {
 	local pid=$1
 	local message=$2
@@ -15,27 +15,27 @@ animation() {
 	while kill -0 $pid 2>/dev/null; do
 		for i in $(seq 0 3); do
 			echo -ne "\b${spin:$i:1}"
-			usleep 100000  # 0.1 сек
+			usleep 100000  # 0.1 sec
 		done
 	done
 
 	wait $pid
 	if [ $? -eq 0 ]; then
-		echo -e "\b✔ Готово!"
+		echo -e "\b✔ Done!"
 	else
-		echo -e "\b✖ Ошибка!"
+		echo -e "\b✖ Error!"
 	fi
 }
 
-# Получение списка и выбор интерфейса
+# Getting a list and selecting an interface
 get_interfaces() {
-    ## выводим список интерфейсов для выбора
-    echo "Доступные интерфейсы:"
+    ## display a list of interfaces to choose from
+    echo "Available interfaces:"
     i=1
     interfaces=$(ip a | sed -n 's/.*: \(.*\): <.*UP.*/\1/p')
     interface_list=""
     for iface in $interfaces; do
-        ## проверяем, существует ли интерфейс, игнорируя ошибки 'ip: can't find device'
+        ## check if the interface exists, ignoring errors 'ip: can't find device'
         if ip a show "$iface" &>/dev/null; then
             ip_address=$(ip a show "$iface" | grep -oP 'inet \K[\d.]+')
 
@@ -47,26 +47,26 @@ get_interfaces() {
         fi
     done
 
-    ## запрашиваем у пользователя имя интерфейса с проверкой ввода
+    ## we ask the user for the interface name with input verification
     while true; do
-        read -p "Введите ИМЯ интерфейса, через которое будет перенаправляться трафик: " net_interface
+        read -p "Enter the NAME of the interface through which traffic will be redirected:" net_interface
 
         if echo "$interface_list" | grep -qw "$net_interface"; then
-            echo "Выбран интерфейс: $net_interface"
+            echo "Interface selected: $net_interface"
 			break
 		else
-			echo "Неверный выбор, необходимо ввести ИМЯ интерфейса из списка."
+			echo "Incorrect choice, you must enter the interface NAME from the list."
 		fi
 	done
 }
 
-# Установка пакетов
+# Installing packages
 opkg_install() {
 	opkg update
 	opkg install ip-full jq
 }
 
-# Формирование файлов
+# Generating files
 files_create() {
 ## ipset
 	cat << EOF > /opt/etc/init.d/S52ipset
@@ -80,7 +80,7 @@ if [ "\$1" = "start" ]; then
 fi
 EOF
 	
-## скрипты маршрутизации
+## routing scripts
 	cat << EOF > /opt/etc/ndm/ifstatechanged.d/010-bypass-table.sh
 #!/bin/sh
 
@@ -93,7 +93,7 @@ if [ -z "\$(ip route list table 1001)" ]; then
 fi
 EOF
 
-## cкрипты маркировки трафика
+## traffic marking scripts
 	cat << EOF > /opt/etc/ndm/netfilter.d/010-bypass.sh
 #!/bin/sh
 
@@ -110,7 +110,7 @@ iptables -w -t mangle -A PREROUTING ! -i $net_interface -m set --match-set bypas
 EOF
 }
 
-# Базовый список доменов для костыля с 3D защитой на всякий случай... ))
+# A basic list of domains for a crutch with 3D protection, just in case...))
 domain_add() {
 	config_file="/opt/etc/AdGuardHome/ipset.conf"
 	pattern="googlevideo.com\|ggpht.com\|googleapis.com\|googleusercontent.com\|gstatic.com\|nhacmp3youtube.com\|youtu.be\|youtube.com\|ytimg.com"
@@ -118,14 +118,14 @@ domain_add() {
 	echo "googlevideo.com,ggpht.com,googleapis.com,googleusercontent.com,gstatic.com,nhacmp3youtube.com,youtu.be,youtube.com,ytimg.com/bypass" >> "$config_file"
 }
 
-# Установка прав на скрипты
+# Setting permissions for scripts
 chmod_set() {
 	chmod +x /opt/etc/init.d/S52ipset
 	chmod +x /opt/etc/ndm/ifstatechanged.d/010-bypass-table.sh
 	chmod +x /opt/etc/ndm/netfilter.d/010-bypass.sh
 }
 
-# Отключение ipv6 на провайдере
+# Disabling ipv6 on your provider
 disable_ipv6() {
 	curl -kfsS "localhost:79/rci/show/interface/" | jq -r '
 	  to_entries[] | 
@@ -140,41 +140,41 @@ disable_ipv6() {
 	ndmc -c 'system configuration save'
 }
 
-# Сообщение установка ОK
+# Message installation OK
 complete_info() {
-	echo "Установка КОСТЫЛЯ завершена"
-	echo "Нажми Enter для перезагрузки (обязательно)."
+	echo "CRUTCH installation is complete"
+	echo "Press Enter to reboot (required)."
 }
 
 # === main ===
-# Запрос интерфейса у пользователя
+# Requesting an interface from the user
 get_interfaces
 
-# Установка пакетов
+# Installing packages
 opkg_install >>"$LOG" 2>&1 &
-animation $! "Установка необходимых пакетов"
+animation $! "Installing required packages"
 
-# Формирование скриптов 
+# Formation of scripts
 files_create >>"$LOG" 2>&1 &
-animation $! "Формируем скрипты"
+animation $! "Generating scripts"
 
-# Добавление YOUTUBE в ipset
+# Adding YOUTUBE to ipset
 domain_add >>"$LOG" 2>&1 &
-animation $! "Добавление в ipset YOUTUBE через костыль"
+animation $! "Adding to ipset YOUTUBE via a crutch"
 
-# Установка прав на выполнение скриптов
+# Setting permissions to execute scripts
 chmod_set >>"$LOG" 2>&1 &
-animation $! "Установка прав на выполнение скриптов"
+animation $! "Setting permissions to execute scripts"
 
-# Отключение ipv6
+# Disabling ipv6
 disable_ipv6 >>"$LOG" 2>&1 &
-animation $! "Отключение ipv6"
+animation $! "Disabling ipv6"
 
-# Завершение
+# Completion
 echo ""
 complete_info
 rm -- "$0"
 
-# Ждем Enter и ребутимся
+# We wait for Enter and reboot
 read -r
 reboot

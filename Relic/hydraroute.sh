@@ -1,18 +1,18 @@
 #!/bin/sh
 
-# Служебные функции и переменные
+# Utility functions and variables
 LOG="/opt/var/log/HydraRoute.log"
-echo "$(date "+%Y-%m-%d %H:%M:%S") Запуск установки" >> "$LOG"
+echo "$(date "+%Y-%m-%d %H:%M:%S") Start installation" >> "$LOG"
 REQUIRED_VERSION="4.2.3"
 IP_ADDRESS=$(ip addr show br0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
 VERSION=$(ndmc -c show version | grep "title" | awk -F": " '{print $2}')
 AVAILABLE_SPACE=$(df /opt | awk 'NR==2 {print $4}')
-## переменные для конфига AGH
+## AGH config variables
 PASSWORD=\$2y\$10\$fpdPsJjQMGNUkhXgalKGluJ1WFGBO6DKBJupOtBxIzckpJufHYpk.
 rule1='||*^$dnstype=HTTPS,dnsrewrite=NOERROR'
 rule2='||yabs.yandex.ru^$important'
 rule3='||mc.yandex.ru^$important'
-## анимация
+## animation
 animation() {
 	local pid=$1
 	local message=$2
@@ -23,27 +23,27 @@ animation() {
 	while kill -0 $pid 2>/dev/null; do
 		for i in $(seq 0 3); do
 			echo -ne "\b${spin:$i:1}"
-			usleep 100000  # 0.1 сек
+			usleep 100000  # 0.1 sec
 		done
 	done
 
 	wait $pid
 	if [ $? -eq 0 ]; then
-		echo -e "\b✔ Готово!"
+		echo -e "\b✔ Done!"
 	else
-		echo -e "\b✖ Ошибка!"
+		echo -e "\b✖ Error!"
 	fi
 }
 
-# Получение списка и выбор интерфейса
+# Getting a list and selecting an interface
 get_interfaces() {
-    ## выводим список интерфейсов для выбора
-    echo "Доступные интерфейсы:"
+    ## display a list of interfaces to choose from
+    echo "Available interfaces:"
     i=1
     interfaces=$(ip a | sed -n 's/.*: \(.*\): <.*UP.*/\1/p')
     interface_list=""
     for iface in $interfaces; do
-        ## проверяем, существует ли интерфейс, игнорируя ошибки 'ip: can't find device'
+        ## check if the interface exists, ignoring errors 'ip: can't find device'
         if ip a show "$iface" &>/dev/null; then
             ip_address=$(ip a show "$iface" | grep -oP 'inet \K[\d.]+')
 
@@ -55,26 +55,26 @@ get_interfaces() {
         fi
     done
 
-    ## запрашиваем у пользователя имя интерфейса с проверкой ввода
+    ## we ask the user for the interface name with input verification
     while true; do
-        read -p "Введите ИМЯ интерфейса, через которое будет перенаправляться трафик: " net_interface
+        read -p "Enter the NAME of the interface through which traffic will be redirected:" net_interface
 
         if echo "$interface_list" | grep -qw "$net_interface"; then
-            echo "Выбран интерфейс: $net_interface"
+            echo "Interface selected: $net_interface"
 			break
 		else
-			echo "Неверный выбор, необходимо ввести ИМЯ интерфейса из списка."
+			echo "Incorrect choice, you must enter the interface NAME from the list."
 		fi
 	done
 }
 
-# Установка пакетов
+# Installing packages
 opkg_install() {
 	opkg update
 	opkg install adguardhome-go ipset iptables ip-full
 }
 
-# Формирование файлов
+# Generating files
 files_create() {
 ## ipset
 	cat << EOF > /opt/etc/init.d/S52ipset
@@ -90,7 +90,7 @@ if [ "\$1" = "start" ]; then
 fi
 EOF
 	
-## скрипты маршрутизации
+## routing scripts
 	cat << EOF > /opt/etc/ndm/ifstatechanged.d/010-bypass-table.sh
 #!/bin/sh
 
@@ -115,7 +115,7 @@ if [ -z "\$(ip -6 route list table 1001)" ]; then
 fi
 EOF
 	
-## cкрипты маркировки трафика
+## traffic marking scripts
 	cat << EOF > /opt/etc/ndm/netfilter.d/010-bypass.sh
 #!/bin/sh
 
@@ -145,10 +145,10 @@ fi
 EOF
 }
 
-# Настройки AGH
+# AGH settings
 agh_setup() {
 	/opt/etc/init.d/S99adguardhome stop
-	## конфиг AdGuard Home
+	## AdGuard Home config
 	cat << EOF > /opt/etc/AdGuardHome/AdGuardHome.yaml
 http:
   pprof:
@@ -370,7 +370,7 @@ schema_version: 29
 EOF
 }
 
-# Базовый список доменов
+# Basic list of domains
 domain_add() {
 	cat << EOF > /opt/etc/AdGuardHome/ipset.conf
 2ip.ru/bypass,bypass6
@@ -381,7 +381,7 @@ chatgpt.com,openai.com,oaistatic.com,files.oaiusercontent.com,gpt3-openai.com,op
 EOF
 }
 
-# Установка прав на скрипты
+# Setting permissions for scripts
 chmod_set() {
 	chmod +x /opt/etc/init.d/S52ipset
 	chmod +x /opt/etc/ndm/ifstatechanged.d/010-bypass-table.sh
@@ -390,7 +390,7 @@ chmod_set() {
 	chmod +x /opt/etc/ndm/netfilter.d/011-bypass6.sh
 }
 
-# Установка web-панели
+# Installing the web panel
 install_panel() {
 	opkg install node tar
 	mkdir -p /opt/tmp
@@ -412,7 +412,7 @@ install_panel() {
 	chmod 755 /opt/etc/HydraRoute/hpanel.js
 }
 
-# Отключение ipv6 на провайдере
+# Disabling ipv6 on your provider
 disable_ipv6() {
 	curl -kfsS "localhost:79/rci/show/interface/" | jq -r '
 	  to_entries[] | 
@@ -427,7 +427,7 @@ disable_ipv6() {
 	ndmc -c 'system configuration save'
 }
 
-# Проверка версии прошивки
+# Checking the firmware version
 firmware_check() {
 	if [ "$(printf '%s\n' "$VERSION" "$REQUIRED_VERSION" | sort -V | tail -n1)" = "$VERSION" ]; then
 		dns_off >>"$LOG" 2>&1 &
@@ -436,17 +436,17 @@ firmware_check() {
 	fi
 }
 
-# Отклчюение системного DNS
+# Disabling system DNS
 dns_off() {
 	ndmc -c 'opkg dns-override'
 	ndmc -c 'system configuration save'
 	sleep 3
 }
 
-# Отключение системного DNS через "nohup"
+# Disabling system DNS via "nohup"
 dns_off_sh() {
 	opkg install coreutils-nohup >>"$LOG" 2>&1
-	echo "Отключение системного DNS..."
+	echo "Disabling system DNS..."
 	echo ""
 	if [ "$PANEL" = "1" ]; then
 		complete_info
@@ -458,73 +458,73 @@ dns_off_sh() {
 	/opt/bin/nohup sh -c "ndmc -c 'opkg dns-override' && ndmc -c 'system configuration save' && sleep 3 && reboot" >>"$LOG" 2>&1
 }
 
-# Сообщение установка ОK
+# Message installation OK
 complete_info() {
-	echo "Установка HydraRoute завершена"
-	echo " - панель управления доступна по адресу: http://$IP_ADDRESS:2000/"
+	echo "HydraRoute installation is complete"
+	echo "- the control panel is available at: http://$IP_ADDRESS:2000/"
 	echo ""
-	echo "Нажмите Enter для перезагрузки (обязательно)."
+	echo "Press Enter to reboot (required)."
 }
 
-# Сообщение установка без панели
+# Message installation without panel
 complete_info_no_panel() {
-	echo "HydraRoute установлен, но для web-панели не достаточно места"
-	echo " - редактирование ipset возможно только вручную (инструкция на GitHub)."
+	echo "HydraRoute is installed, but there is not enough space for the web panel"
+	echo "- editing ipset is only possible manually (instructions on GitHub)."
 	echo ""
-	echo "AdGuard Home доступен по адресу: http://$IP_ADDRESS:3000/"
+	echo "AdGuard Home is available at: http://$IP_ADDRESS:3000/"
 	echo "Login: admin"
 	echo "Password: keenetic"
 	echo ""
-	echo "Нажмите Enter для перезагрузки (обязательно)."
+	echo "Press Enter to reboot (required)."
 }
 
 # === main ===
-# Выход если места меньше 80Мб
+# Exit if the space is less than 80MB
 if [ "$AVAILABLE_SPACE" -lt 81920 ]; then
-	echo "Не достаточно места для установки"
+	echo "Not enough space for installation"
 	rm -- "$0"
 	exit 1
 fi
 
-# Запрос интерфейса у пользователя
+# Requesting an interface from the user
 get_interfaces
 
-# Установка пакетов
+# Installing packages
 opkg_install >>"$LOG" 2>&1 &
-animation $! "Установка необходимых пакетов"
+animation $! "Installing required packages"
 
-# Формирование скриптов 
+# Formation of scripts
 files_create >>"$LOG" 2>&1 &
-animation $! "Формируем скрипты"
+animation $! "Generating scripts"
 
-# Настройка AdGuard Home
+# AdGuard Home Setup
 agh_setup >>"$LOG" 2>&1 &
-animation $! "Настройка AdGuard Home"
+animation $! "AdGuard Home Setup"
 
-# Добавление доменов в ipset
+# Adding domains to ipset
 domain_add >>"$LOG" 2>&1 &
-animation $! "Добавление доменов в ipset"
+animation $! "Adding domains to ipset"
 
-# Установка прав на выполнение скриптов
+# Setting permissions to execute scripts
 chmod_set >>"$LOG" 2>&1 &
-animation $! "Установка прав на выполнение скриптов"
+animation $! "Setting permissions to execute scripts"
 
-# установка web-панели если места больше 80Мб
+# installing a web panel if the space is more than 80MB
 if [ "$AVAILABLE_SPACE" -gt 81920 ]; then
 	PANEL="1"
 	install_panel >>"$LOG" 2>&1 &
-	animation $! "Установка web-панели"
+	animation $! "Installing the web panel"
 fi
 
-# Отключение ipv6
+# Disabling ipv6
 disable_ipv6 >>"$LOG" 2>&1 &
-animation $! "Отключение ipv6"
+animation $! "Disabling ipv6"
 
-# Отключение системного DNS и сохранение
+# Disabling system DNS and saving
 firmware_check
-animation $! "Отключение системного DNS"
+animation $! "Disabling System DNS"
 
-# Завершение
+# Completion
 echo ""
 if [ "$PANEL" = "1" ]; then
 	complete_info
@@ -533,6 +533,6 @@ else
 fi
 rm -- "$0"
 
-# Ждем Enter и ребутимся
+# We wait for Enter and reboot
 read -r
 reboot
