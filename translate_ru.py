@@ -143,7 +143,7 @@ def main():
     
     # --- 关键修改：在这里添加 'config' 这种无后缀文件 ---
     target_files = ['config', 'Makefile', 'xkeen', 'OffLine_install', 'FileDescriptors'] 
-    target_exts = ['.sh', '.cfg', '.conf', '.list', '.lst', '.md'] 
+    target_exts = ['.sh', '.cfg', '.conf', '.list', '.lst', '.md', '.lst', '.js', '.html', '.go'] 
 
     for root, dirs, files in os.walk("."):
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
