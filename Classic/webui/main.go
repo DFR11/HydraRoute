@@ -60,7 +60,7 @@ func main() {
 	}
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(contentFS))))
 
-	fmt.Printf("Сервер запущен на http://%s:%d\n", br0IP, port)
+	fmt.Printf("The server is running at http://%s:%d\n", br0IP, port)
 	http.ListenAndServe(fmt.Sprintf("%s:%d", br0IP, port), mux)
 }
 
@@ -220,14 +220,14 @@ func loadServicesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil || resp == nil || resp.StatusCode != http.StatusOK {
-		http.Error(w, "Не удалось получить список сервисов с GitHub", http.StatusGatewayTimeout)
+		http.Error(w, "Failed to get list of services from GitHub", http.StatusGatewayTimeout)
 		return
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		http.Error(w, "Ошибка чтения данных", http.StatusInternalServerError)
+		http.Error(w, "Error reading data", http.StatusInternalServerError)
 		return
 	}
 
@@ -275,14 +275,14 @@ func ensureAdGuardRunning() {
 	cmd := exec.Command(aghServicePath, "status")
 	output, err := cmd.CombinedOutput()
 	if err != nil || !strings.Contains(string(output), "alive") {
-		// fmt.Println("AdGuardHome не запущен. Попытка запуска...")
+		// fmt.Println("AdGuardHome is not running. Attempting to launch...")
 		if startErr := exec.Command(aghServicePath, "start").Run(); startErr != nil {
-			// fmt.Printf("Не удалось запустить AdGuardHome: %v\n", startErr)
+			// fmt.Printf("Failed to launch AdGuardHome: %v\n", startErr)
 		} else {
-			// fmt.Println("AdGuardHome успешно запущен.")
+			// fmt.Println("AdGuardHome has been successfully launched.")
 		}
 	} else {
-		// fmt.Println("AdGuardHome уже запущен.")
+		// fmt.Println("AdGuardHome is already launched.")
 	}
 }
 
@@ -302,10 +302,10 @@ func aghStatusHandler(w http.ResponseWriter, r *http.Request) {
 	cmd := exec.Command("/opt/etc/init.d/S99adguardhome", "status")
 	output, err := cmd.CombinedOutput()
 	if err != nil || !strings.Contains(string(output), "alive") {
-		http.Error(w, "Остановлен", http.StatusInternalServerError)
+		http.Error(w, "Stopped", http.StatusInternalServerError)
 		return
 	}
-	w.Write([]byte("Запущен и работает"))
+	w.Write([]byte("Up and running"))
 }
 
 func aghRestartHandler(w http.ResponseWriter, r *http.Request) {
@@ -315,10 +315,10 @@ func aghRestartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := exec.Command(aghServicePath, "start").Run()
 	if err != nil {
-		http.Error(w, "Ошибка перезапуска AdGuardHome", http.StatusInternalServerError)
+		http.Error(w, "AdGuardHome restart error", http.StatusInternalServerError)
 		return
 	}
-	w.Write([]byte("AdGuardHome перезапущен"))
+	w.Write([]byte("AdGuardHome has been relaunched"))
 }
 
 func configHandler(w http.ResponseWriter, r *http.Request) {
@@ -366,7 +366,7 @@ func parseConfig() map[string][]map[string]interface{} {
 func saveHandler(w http.ResponseWriter, r *http.Request) {
 	var data map[string][]map[string]interface{}
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		http.Error(w, "Ошибка декодирования", http.StatusBadRequest)
+		http.Error(w, "Decoding error", http.StatusBadRequest)
 		return
 	}
 
@@ -385,7 +385,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := ioutil.WriteFile(filePath, []byte(strings.Join(lines, "\n")), 0644); err != nil {
-		http.Error(w, "Ошибка сохранения", http.StatusInternalServerError)
+		http.Error(w, "Save error", http.StatusInternalServerError)
 		return
 	}
 
@@ -402,7 +402,7 @@ func interfacesHandler(w http.ResponseWriter, r *http.Request) {
 	policyNames := []string{"HydraRoute1st", "HydraRoute2nd", "HydraRoute3rd"}
 	polOut, err := exec.Command("curl", "-kfsS", "localhost:79/rci/show/ip/policy/").Output()
 	if err != nil {
-		http.Error(w, "Ошибка curl", http.StatusInternalServerError)
+		http.Error(w, "curl error", http.StatusInternalServerError)
 		return
 	}
 	var policies map[string]interface{}
@@ -410,7 +410,7 @@ func interfacesHandler(w http.ResponseWriter, r *http.Request) {
 
 	ifOut, err := exec.Command("curl", "-kfsS", "localhost:79/rci/show/interface/").Output()
 	if err != nil {
-		http.Error(w, "Ошибка curl интерфейса", http.StatusInternalServerError)
+		http.Error(w, "curl interface error", http.StatusInternalServerError)
 		return
 	}
 	var ifaceMap map[string]interface{}

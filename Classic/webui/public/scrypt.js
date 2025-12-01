@@ -7,11 +7,11 @@ function openModal(title, message) {
 	modalTitle.textContent = title;
 	modalMessage.innerHTML = message;
 
-	if (message.includes('Войдите снова')) {
-		modalButton.textContent = "Войти";
+	if (message.includes('Login again')) {
+		modalButton.textContent = "Login";
 		modalButton.onclick = () => window.location.href = "/login";
 	} else {
-		modalButton.textContent = "Закрыть";
+		modalButton.textContent = "Close";
 		modalButton.onclick = closeModal;
 	}
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const resetButton = document.getElementById("dashboard-reset");
 	const githubButton = document.getElementById("load-from-github");
 	githubButton.addEventListener("click", async () => {
-		openModal("Загрузка сервисов", `
+		openModal("Loading services", `
 			<div id="service-loading-message" style="display: none;">Загрузка...</div>
 			<div class="service-list-container">
 				<ul id="service-list"></ul>
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const list = document.getElementById("service-list");
 
 		if (services.length === 0) {
-			list.innerHTML = "<li>Не удалось загрузить список сервисов</li>";
+			list.innerHTML = "<li>Failed to load list of services</li>";
 			return;
 		}
 
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	const urlButton = document.getElementById("load-from-url");
 	urlButton.addEventListener("click", () => {
-		openModal("Загрузка по ссылке", `
+		openModal("Download from link", `
 			<p>Укажите ссылку на файл со списком доменов:</p>
 			<input type="text" id="custom-url" placeholder="https://example.com/domains.txt" style="width: 100%; padding: 8px; margin-top: 10px;">
 			<button id="confirm-url-load" style="margin-top: 15px;">Загрузить</button>
@@ -115,21 +115,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.getElementById("confirm-url-load").addEventListener("click", async () => {
 			const input = document.getElementById("custom-url").value.trim();
 			if (!input.startsWith("http")) {
-				openModal("Ошибка", "Неверная ссылка.");
+				openModal("Error", "Invalid link.");
 				return;
 			}
 
 			try {
 				const domains = await loadDomainsFromGithub([input]); // использует уже существующую функцию
 				if (domains.length === 0) {
-					openModal("Информация", "Новых доменов не найдено.");
+					openModal("Information", "No new domains found.");
 					return;
 				}
 				addDomainsToField(domains);
 				closeModal();
 			} catch (error) {
-				console.error('Ошибка загрузки по ссылке:', error);
-				openModal('Ошибка', 'Не удалось загрузить домены по указанной ссылке.');
+				console.error('Box load on the link:', error);
+				openModal('Error', 'Failed to load domains from the specified link.');
 			}
 		});
 	});
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			let interfaceName = interfaces[index] || 'Null';
 			
 			if (interfaceName === 'Null') {
-				interfaceName = 'Нет активного подключения';
+				interfaceName = 'No active connection';
 			}
 
 			button.innerHTML = `
@@ -202,12 +202,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 				</label>
 				<div class="domain-content">
 					<div class="domain-controls">
-						<input type="text" class="description" value="${description}" placeholder="Описание">
+						<input type="text" class="description" value="${description}" placeholder="Description">
 					</div>
 					<textarea>${sanitizeInput(value, true)}</textarea>
 					<div class="remove-container">
 						<button class="remove">
-							<img src="/static/assets/sprite/delete.svg" alt="Удалить" class="delete-icon">
+							<img src="/static/assets/sprite/delete.svg" alt="Delete" class="delete-icon">
 							<span>удалить</span>
 						</button>
 					</div>
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		div.querySelector(".remove").addEventListener("click", () => div.remove());
 	}
 
-	function addDomainsToField(domains, source = 'Загружено по ссылке') {
+	function addDomainsToField(domains, source = 'Uploaded via link') {
 		const grouped = domains.length > 0 ? domains.join(',') : '';
 		if (grouped) {
 			addDomainField(grouped, true, source);
@@ -235,22 +235,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 			.map(input => input.value);
 
 		if (selectedServices.length === 0) {
-			openModal('Ошибка', 'Выберите хотя бы один сервис.');
+			openModal('Error', 'Select at least one service.');
 			return;
 		}
 
 		try {
 			const domains = await loadDomainsFromGithub(selectedServices);
 			if (domains.length === 0) {
-				openModal('Информация', 'Новых доменов не найдено.');
+				openModal('Information', 'No new domains found.');
 				return;
 			}
-			addDomainsToField(domains, 'Загружено с GitHub');
+			addDomainsToField(domains, 'Downloaded from GitHub');
 			resetCheckboxes();
 			closeModal();
 		} catch (error) {
-			console.error('Ошибка загрузки:', error);
-			openModal('Ошибка', 'Ошибка при загрузке доменов.');
+			console.error('Loading error:', error);
+			openModal('Error', 'Error loading domains.');
 		}
 	}
 
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						window.location.href = "/login";
 						return;
 					}
-					throw new Error('Ошибка загрузки данных');
+					throw new Error('Error loading data');
 				}
 				return response.json();
 			})
@@ -272,8 +272,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 				loadPolicy(activePolicy);
 			})
 			.catch(error => {
-				console.error("Ошибка загрузки данных:", error);
-				openModal('Ошибка', 'Сессия истекла.<br><br>Войдите снова.');
+				console.error("Error loading data:", error);
+				openModal('Error', 'Your session has expired.<br><br>Log in again.');
 			});
 	}
 
@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			});
 
 			tableHTML += '</table>';
-			openModal("Пересекающиеся или одинаковые домены", tableHTML);
+			openModal("Overlapping or identical domains", tableHTML);
 			return false;
 		}
 
@@ -375,7 +375,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						</div>
 					</div>
 				`;
-				openModal("Сохранено", loaderHTML);
+				openModal("Saved", loaderHTML);
 
 				let progress = 0;
 				const interval = setInterval(() => {
@@ -383,18 +383,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 					document.getElementById('dns-progress').style.width = progress + '%';
 					if (progress >= 100) {
 						clearInterval(interval);
-						document.getElementById('modal-message').innerHTML = '<p>DNS сервер успешно перезапущен.</p>';
+						document.getElementById('modal-message').innerHTML = '<p>DNS server has been successfully restarted.</p>';
 					}
 				}, 150); // 150 мс * 100 шагов ≈ 15 секунд
 
 				loadAllData();
 			} else {
-				openModal("Ошибка", "Что-то пошло не так: " + (result.error || "Неизвестная ошибка"));
+				openModal("Error", "Something went wrong:" + (result.error || "Unknown error"));
 			}
 		})
 		.catch(error => {
-			console.error("Ошибка сохранения:", error);
-			openModal("Ошибка", "Ошибка сохранения: " + error.message);
+			console.error("Saving error:", error);
+			openModal("Error", "Saving error:" + error.message);
 		});
 	});
 
@@ -419,13 +419,13 @@ fetch('/br0ip')
         if (data.ip) {
             document.getElementById('adguard-link').href = `http://${data.ip}:3000`;
         } else {
-            console.error('Не удалось получить IP-адрес br0');
-            openModal('Ошибка', 'Не удалось получить IP-адрес br0');
+            console.error('Failed to obtain IP address br0');
+            openModal('Error', 'Failed to obtain IP address br0');
         }
     })
     .catch(error => {
-        console.error('Ошибка получения IP:', error);
-        openModal('Ошибка', 'Ошибка получения IP: ' + error.message);
+        console.error('Error getting IP:', error);
+        openModal('Error', 'Error getting IP:' + error.message);
     });
 
 function updateStatus() {
@@ -435,8 +435,8 @@ function updateStatus() {
             document.getElementById('adguard-status').textContent = `Статус: ${data}`;
         })
         .catch(() => {
-            document.getElementById('adguard-status').textContent = 'Ошибка при получении статуса';
-            openModal('Ошибка', 'Ошибка при получении статуса');
+            document.getElementById('adguard-status').textContent = 'Error getting status';
+            openModal('Error', 'Error getting status');
         });
 }
 
@@ -447,11 +447,11 @@ document.getElementById('adguard-restart-button').addEventListener('click', func
     })
     .then(response => response.text())
     .then(data => {
-        openModal('Успех', data);
+        openModal('Success', data);
         updateStatus();
     })
     .catch(error => {
-        openModal('Ошибка', error.message);
+        openModal('Error', error.message);
     });
 });
 
@@ -542,8 +542,8 @@ function logout() {
         }
     })
     .catch(error => {
-        console.error('Ошибка при выходе из системы:', error);
-        openModal('Ошибка', 'Ошибка при выходе из системы');
+        console.error('Error when logging out:', error);
+        openModal('Error', 'Error when logging out');
     });
 }
 
@@ -556,7 +556,7 @@ document.getElementById('change-password-form').addEventListener('submit', async
     const messageElement = document.getElementById('password-change-message');
 
     if (newPassword !== confirmPassword) {
-        messageElement.textContent = 'Новый пароль и подтверждение не совпадают.';
+        messageElement.textContent = 'The new password and confirmation do not match.';
         return;
     }
 
@@ -575,12 +575,12 @@ document.getElementById('change-password-form').addEventListener('submit', async
         const result = await response.json();
 
         if (result.success) {
-            messageElement.textContent = 'Пароль успешно изменен.';
+            messageElement.textContent = 'The password has been successfully changed.';
         } else {
-            messageElement.textContent = result.error || 'Ошибка при смене пароля.';
+            messageElement.textContent = result.error || 'Error changing password.';
         }
     } catch (error) {
-        messageElement.textContent = 'Ошибка при отправке запроса.';
+        messageElement.textContent = 'Error sending request.';
     }
 });
 
