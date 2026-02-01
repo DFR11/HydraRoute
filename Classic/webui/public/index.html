@@ -36,35 +36,35 @@
                 <div class="dashboard-content" id="dashboard-content">
 					<div class="description-container">
 						<div class="description-header">
-							<h1>Политики доступа</h1>
+							<h1>Access Policies</h1>
 							<button class="description-toggle" aria-label="More details">
 								<img src="assets/sprite/info.svg" alt="More details">
 							</button>
 						</div>
 						<div class="description-content">
-							<p>Добавлять устройства в политику – не нужно.</p>
+							<p>There is no need to add devices to the policy.</p>
 							<ul>
-								<li>Правила переадресации доменов применяются ко всему, что подключено к роутеру.</li>
-								<li>При помещении устройства в политику ВЕСЬ его трафик будет перенаправляться через указанное в политике подключение.</li>
+								<li>Domain forwarding rules apply to everything connected to the router.</li>
+								<li>When you place a device in a policy, ALL of its traffic will be redirected through the connection specified in the policy.</li>
 							</ul>
-							<p>Создавать отдельное поле для каждого домена – избыточно.</p>
+							<p>Creating a separate field for each domain is redundant.</p>
 							<ul>
-								<li>Соберите домены в группу и дайте ей краткое описание.</li>
-								<li>Домены внутри группы разделяются запятой. Пробелы добавляются для удобства.</li>
+								<li>Gather the domains into a group and give it a brief description.</li>
+								<li>Domains within a group are separated by a comma. Spaces are added for convenience.</li>
 							</ul>
-							<p>Неиспользуемые домены можно временно отключить.</p>
+							<p>Unused domains can be temporarily disabled.</p>
 							<ul>
-								<li>Чек бокс напротив доменных имен отвечает за их включение и выключение.</li>
-								<li>Вместо удаления можно отключить их на время и включить когда они понадобятся вновь.</li>
+								<li>The checkbox next to domain names is responsible for turning them on and off.</li>
+								<li>Instead of deleting them, you can disable them for a while and enable them when you need them again.</li>
 							</ul>
-							<p>Данные об IP-адресе на специальных сервисах могут какое-то время оставаться прежними после внесения изменений в HR.</p>
+							<p>IP address data on special services may remain the same for some time after changes are made to HR.</p>
 							<ul>
-								<li>Помните, что DNS кэш есть и у браузера и у операционной системы.</li>
-								<li>Если сомневаетесь в результате - выполните tracert, чтобы убедиться по какому маршруту трафик идет к нужному домену.</li>
+								<li>Remember that both the browser and the operating system have a DNS cache.</li>
+								<li>If you doubt the result, run a tracert to make sure which route the traffic is taking to the desired domain.</li>
 							</ul>							
-							<p>Домены третьего уровня и выше подхватываются автоматически.</p>
+							<p>Domains of the third level and higher are picked up automatically.</p>
 							<ul>
-								<li>Указав yandex.ru будут перенаправляться все домены, заканивающиеся на yandex.ru, в т.ч. mail.yandex.ru, disk.yandex.ru и т.д</li>
+								<li>By specifying yandex.ru, all domains ending at yandex.ru will be redirected, incl. mail.yandex.ru, disk.yandex.ru, etc.</li>
 							</ul>
 							</ul>
 						</div>
@@ -87,15 +87,15 @@
                         <div class="dashboard-domain">
                             <div id="dashboard-domains-container"></div>
 							<div class="button-container">
-								<button id="dashboard-add-field">+ Добавить поле</button>
-								<button id="load-from-github">+ Загрузить с GitHub</button>
-								<button id="load-from-url">+ Загрузить по ссылке</button>
+								<button id="dashboard-add-field">+Add field</button>
+								<button id="load-from-github">+ Download from GitHub</button>
+								<button id="load-from-url">+ Download from link</button>
 							</div>
                         </div>
                     </div>
                     <div class="dashboard-buttons">
-                        <button id="dashboard-save" class="dashboard-button">Сохранить</button>
-                        <button id="dashboard-reset" class="dashboard-button">Отменить</button>
+                        <button id="dashboard-save" class="dashboard-button">Save</button>
+                        <button id="dashboard-reset" class="dashboard-button">Cancel</button>
                     </div>
                 </div>
 				<div class="adguard-content" id="adguard-content">
@@ -107,56 +107,56 @@
 							</button>
 						</div>
 						<div class="description-content">
-							<p>AdGuard Home не отображает статистику.</p>
+							<p>AdGuard Home does not display statistics.</p>
 							<ul>
-								<li>По умолчанию статистика отключена т.к. журалы занимают место, включите ее в настрйоках:</li>
-								<li>Веб-конфигуратор -> Настройки -> Основные -> "Enable log", "Enable statistics".</li>
+								<li>By default, statistics are disabled because Journals take up space, turn it on in the settings:</li>
+								<li>Web Configurator -> Settings -> General -> "Enable log", "Enable statistics".</li>
 							</ul>
-							<p>Если нужны домены .local - укажите их в AdGuard Home:</p>
+							<p>If you need .local domains, specify them in AdGuard Home:</p>
 							<ul>
-								<li>Веб-конфигуратор -> Фильтры -> Перезапись DNS-запросов.</li>
+								<li>Web Configurator -> Filters -> Rewrite DNS queries.</li>
 							</ul>
-							<p>Как разблокировать сайт в AdGuard Home?</p>
+							<p>How to unblock a website in AdGuard Home?</p>
 							<ul>
 								<li>Веб-конфигуратор -> Фильтры -> Пользовательские правила фильтрации -> Проверить фильтрацию ->
-								ввести имя хоста -> нажать "Check" -> нажать "Unblock".</li>
+								ввести имя хоста ->click "Check" -> click "Unblock".</li>
 							</ul>
 						</div>
 					</div>
 					<div class="adguard-status-container">
-						<h2 id="adguard-status">Загрузка...</h2>
-						<a id="adguard-restart-button" href="#" class="adguard-restart">Перезапустить</a>
+						<h2 id="adguard-status">Loading...</h2>
+						<a id="adguard-restart-button" href="#" class="adguard-restart">Restart</a>
 					</div>
 					<p></p>
-					<a id="adguard-link" href="#" class="adguard-button">Перейти в веб-конфигуратор</a>
+					<a id="adguard-link" href="#" class="adguard-button">Go to web configurator</a>
 					<p>Login: admin</p>
 					<p>Password: keenetic</p>
 				</div>
 				<div class="settings-content" id="settings-content">
 					<div class="description-container">
 						<div class="description-header">
-							<h1>Настройки</h1>
+							<h1>Settings</h1>
 							<button class="description-toggle" aria-label="More details">
 								<img src="assets/sprite/info.svg" alt="More details">
 							</button>
 						</div>
 					</div>
 					<div class="password-container">
-						<h2>Сменить пароль доступа к HydraRoute</h2>
+						<h2>Change your HydraRoute password</h2>
 						<form id="change-password-form">
 							<div class="password-input">
-								<label for="current-password">Текущий пароль</label>
+								<label for="current-password">Current Password</label>
 								<input type="password" id="current-password" name="current-password" required>
 							</div>
 							<div class="password-input">
-								<label for="new-password">Новый пароль</label>
+								<label for="new-password">New Password</label>
 								<input type="password" id="new-password" name="new-password" required>
 							</div>
 							<div class="password-input">
-								<label for="confirm-password">Подтвердите новый пароль</label>
+								<label for="confirm-password">Confirm your new password</label>
 								<input type="password" id="confirm-password" name="confirm-password" required>
 							</div>
-							<button type="submit" class="password-save-button">Сохранить</button>
+							<button type="submit" class="password-save-button">Save</button>
 						</form>
 						<p id="password-change-message"></p>
 					</div>
@@ -164,14 +164,14 @@
                 <div class="info-content" id="info-content">
 					<div class="description-container">
 						<div class="description-header">
-							<h1>Информация</h1>
+							<h1>Information</h1>
 							<button class="description-toggle" aria-label="More details">
 								<img src="assets/sprite/info.svg" alt="More details">
 							</button>
 						</div>
 					</div>
-                    <h2>Этот функционал в разработке...</h2>
-                    <p>Пожалуйста, подождите, пока завершится работа.</p>
+                    <h2>This functionality is under development...</h2>
+                    <p>Please wait while the job is completed.</p>
                 </div>
             </div>
         </div>
@@ -196,7 +196,7 @@
         <div class="modal-content">
             <h2 id="modal-title"></h2>
             <p id="modal-message"></p>
-            <button onclick="closeModal()">закрыть</button>
+            <button onclick="closeModal()">close</button>
         </div>
     </div>
 </body>
