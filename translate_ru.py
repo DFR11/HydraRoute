@@ -50,7 +50,7 @@ def process_single_file(file_path, inside_tar=False):
     prefix_log = "    " if inside_tar else ""
     
     # 简单的扩展名/文件名过滤
-    valid_exts = ['.sh', '.cfg', '.conf', '.list', '.txt', '.json', '.xml']
+    valid_exts = ['.sh', '.cfg', '.conf', '.list', '.txt', '.json', '.xml', '.html']
     valid_names = ['config', 'Makefile', 'control', 'postinst', 'prerm']
     
     if not (any(file_path.endswith(ext) for ext in valid_exts) or os.path.basename(file_path) in valid_names):
