@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 
 			try {
-				const domains = await loadDomainsFromGithub([input]); // использует уже существующую функцию
+				const domains = await loadDomainsFromGithub([input]); // uses an already existing function
 				if (domains.length === 0) {
 					openModal("Information", "No new domains found.");
 					return;
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						clearInterval(interval);
 						document.getElementById('modal-message').innerHTML = '<p>DNS server has been successfully restarted.</p>';
 					}
-				}, 150); // 150 мс * 100 шагов ≈ 15 секунд
+				}, 150); // 150 ms * 100 steps ≈ 15 seconds
 
 				loadAllData();
 			} else {
@@ -538,7 +538,7 @@ function logout() {
     })
     .then(response => {
         if (response.redirected) {
-            window.location.href = response.url; // Перенаправление на страницу входа
+            window.location.href = response.url; // Redirect to login page
         }
     })
     .catch(error => {
