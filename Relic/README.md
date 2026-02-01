@@ -1,24 +1,24 @@
-**Эта версия более не поддерживается! Инструкции могуть быть не актуальны!**
+**This version is no longer supported! Instructions may not be current!**
 
 # HydraRoute v.0.0.1b(202501300900)
 
-**Основная цель** — перенаправление трафика к **отдельным доменам** через VPN. Все, что не указано в списке, будет открываться напрямую.
+**The main purpose** is to redirect traffic to **individual domains** via VPN. Anything not listed will be opened directly.
 
 ## Installation:
-1. Подключитесь к роутеру по SSH (к Entware).
-2. Выполните команду:
+1. Connect to the router via SSH (to Entware).
+2. Run the command:
 ```
 curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic/hydraroute.sh" > /opt/tmp/hydraroute.sh && chmod +x /opt/tmp/hydraroute.sh && /opt/tmp/hydraroute.sh
 ```
-3. Выберите VPN из списка.
+3. Select VPN from the list.
 
 ## Additional information:
 ### How to add domains to ipset
 
-1. Через web-панель.
+1. The turn web-panel.
    - web-панель доступна по адресу: [http://192.168.1.1:2000/](http://192.168.1.1:2000/)
-     * (где `192.168.1.1` - это IP-адрес роутера)
-2. Вручную, правкой файла `ipset.conf`.
+     * (where `192.168.1.1` is the router's IP address)
+2. Manually, by editing the `ipset.conf` file.
 
     <details>
     <summary>нажать, чтобы прочесть подробней</summary>
@@ -35,12 +35,12 @@ curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic
         instagram.com,cdninstagram.com/bypass,bypass6
         openai.com,chatgpt.com/bypass,bypass6
         ```
-        - В левой части через запятую указаны домены, требующие обхода.
-        - Справа после слэша — ipset, в который AGH складывает результаты разрешения DNS-имён. В примере указаны созданные скриптом `ipset` для IPv4 и IPv6: `/bypass,bypass6`.
-        - Можно указать всё в одну строчку, можно разделить логически на несколько строк, как в примере.
-        - Домены третьего уровня и выше включаются сами, т.е. указание `intel.com` включает также `www.intel.com`, `download.intel.com` и прочее.
+        - On the left side, domains that require crawling are indicated, separated by commas.
+        - On the right after the slash is ipset, into which AGH adds the results of DNS name resolution. The example shows the `ipset` created by the script for IPv4 and IPv6: `/bypass,bypass6`.
+        - You can specify everything in one line, or you can divide it logically into several lines, as in the example.
+        - Domains of the third level and higher are included themselves, i.e. the indication `intel.com` also includes `www.intel.com`, `download.intel.com` and so on.
         </details>
-    2. После добавления доменов необходимо перезапустить **AdGuard Home** командой:
+    2. After adding domains, you need to restart **AdGuard Home** with the command:
         ```
         /opt/etc/init.d/S99adguardhome restart
         ```

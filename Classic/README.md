@@ -1,37 +1,37 @@
 # HydraRoute Classic
 
-**HydraRoute Classic** — выбрать куда перенаправить отдельные домены или группу/список доменов можно  
-просто изменив подключение в политике доступа веб-интерфейса роутера.
+**HydraRoute Classic** - you can choose where to redirect individual domains or a group/list of domains
+simply by changing the connection in the access policy of the router's web interface.
 
 ---
 
 ## 📚 Table of contents
 
-- [🚀 Возможности Classic](#-возможности-classic)
-- [📋 Системные требования](#-системные-требования)
-- [💾 Установка](#-установка)
-- [📁 Работа с доменами](#-работа-с-доменами)
-- [🔧 Политики доступа](#-политики-доступа)
-- [🔄 Обновление](#-обновление)
-- [❌ Удаление](#-удаление)
-- [ℹ️ Примечания](#️-примечания)
+- [🚀 Classic features](#-classic features)
+- [📋 System requirements](#-system-requirements)
+- [💾 Installation](#-installation)
+- [📁 Working with domains](#-working-with-domains)
+- [🔧 Access policies](#-access-policies)
+- [🔄 Update](#-update)
+- [❌ Deletion](#-deletion)
+- [ℹ️ Notes](#️-notes)
 - [☕ Donate](#-donate)
 
 ---
 
 ## 🚀 Classic features
 
-- Перенаправление трафика доменов в VPN.
-- Поддержка до 3х политик доступа.
-- Изменение подключения для группы доменов без перезапуска.
-- Совместимость с WARP.
+- Redirect domain traffic to VPN.
+- Supports up to 3 access policies.
+- Changing the connection for a group of domains without restarting.
+- WARP compatible.
 
 ---
 
 ## 📋 System requirements
 
 - Роутер Keenetic с установленным [Entware](https://help.keenetic.com/hc/ru/articles/360021214160)
-- Установленный пакет `curl`:
+- Installed `curl` package:
   ```
   opkg install curl
   ```
@@ -40,76 +40,76 @@
 
 ## 💾 Installation
 
-1. 📦 Добавить репозиторий:
+1. 📦 Add repository:
 ```
 curl -Ls "https://ground-zerro.github.io/release/keenetic/install-feed.sh" | sh
 ```
 
-2. 🚀 Установить HydraRoute Classic:
+2. 🚀 Install HydraRoute Classic:
 ```
 opkg install hydraroute
 ```
 
-> ⚠️ После установки устройство будет автоматически перезагружено.
+> ⚠️ After installation, the device will automatically reboot.
 
-3. ✅ Настройка после загрузки:
-   - Веб-интерфейс роутера → **Приоритеты подключений → Политики доступа в интернет**
-   - Найти политику **HydraRoute1st** и отметить нужное подключение
+3. ✅ Settings after downloading:
+   - Router web interface → **Connection priorities → Internet access policies**
+   - Find the **HydraRoute1st** policy and mark the desired connection
 
 ---
 
 ## 📁 Working with domains
 
-Выбор: через Web-интерфейс **ИЛИ** вручную.
+Choice: via the Web interface **OR** manually.
 
 ### 🖥️ Via the Web interface:
 
 - Открыть [http://hr.net/](http://hr.net/) или [http://192.168.1.1:2000/](http://192.168.1.1:2000/)
-- Пароль по умолчанию: `keenetic`
+- Default password: `keenetic`
 
 ### ✍️ Manually:
 
-1. Открыть файл:
+1. Open file:
 `/opt/etc/AdGuardHome/domain.conf`
 ```
 nano /opt/etc/AdGuardHome/domain.conf
 ```
 
-2. Добавить домены:
+2. Add domains:
 ```
 youtube.com,googlevideo.com/hr1
 openai.com,chatgpt.com/hr2
 ```
 
-- Домены разделяются запятой
-- После `/` — имя ipset группы (см. таблицу ниже)
+- Domains are separated by comma
+- After `/` - the name of the ipset group (see table below)
 
-| Политика          | ipset |
+| Politics | ipset |
 |:------------------|:------|
 | HydraRoute1st     | hr1   |
 | HydraRoute2nd     | hr2   |
 | HydraRoute3rd     | hr3   |
 
-3. 💡 Перезапуск AdGuard Home:
+3. 💡 Restarting AdGuard Home:
 ```
 agh restart
 ```
 
-> 👉 Поддомены (`*.google.com`, `*.yandex.ru` etc.) подхватываются автоматически
+> 👉 Subdomains (`*.google.com`, `*.yandex.ru` etc.) are picked up automatically
 
 ---
 
 ## 🔧 Access policies
 
-- Политики можно назначать как доменам, так и устройствам.
-- При отключении всех подключений в политике — трафик доменов блокируется.
-- Порядок туннелей в политике задаёт приоритет переключения при потере связи.
+- Policies can be assigned to both domains and devices.
+- If all connections are disabled in the policy, domain traffic is blocked.
+- The order of tunnels in the policy specifies the switching priority when connection is lost.
 
 ---
 
 ## 🔄 Update
 
-Конмада для обновления установленных пакетов:
+Conmada for updating installed packages:
 ```
 opkg update && opkg upgrade
 ```
@@ -118,12 +118,12 @@ opkg update && opkg upgrade
 
 ## ❌ Removal
 
-Стандартно:
+Standard:
 ```
 opkg remove hydraroute
 ```
 
-Полное удаление (в т.ч. файлы, логи etc.) c откатом всех изменений в системе к стандартным:
+Complete deletion (including files, logs, etc.) with a rollback of all changes in the system to standard:
 ```
 curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 ```
@@ -132,13 +132,13 @@ curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 
 ## ℹ️ Notes
 
-- Не переименовывайте и не удаляйте политики `HydraRoute` (`1st`, `2nd`, `3rd`), иначе скрипт перестанет работать.
+- Do not rename or delete the `HydraRoute` policies (`1st`, `2nd`, `3rd`), otherwise the script will stop working.
 
 ---
 
 ## ☕ Donate
 
-Если HydraRoute оказался Вам полезным — можно отблагодарить автора:
+If HydraRoute was useful to you, you can thank the author:
 
 - [Угостив](https://boosty.to/ground_zerro/donate) кружечкой горячего какао 😋
 - Став [подписчиком](https://boosty.to/ground_zerro)

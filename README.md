@@ -1,24 +1,24 @@
 # HydraRoute
 
-**HydraRoute** — инструмент для раздельной маршрутизации трафика по доменам с использованием VPN на роутерах **Keenetic**.
+**HydraRoute** is a tool for separate routing of traffic across domains using VPN on **Keenetic** routers.
 
-💡 Трафик к указанным доменам отправляется через VPN, а всё остальное — напрямую.  
-Управление политиками — через Web-интерфейс роутера или конфигурационные файлы.
+💡 Traffic to the specified domains is sent through the VPN, and everything else is sent directly.
+Policy management - via the router's Web interface or configuration files.
 
 ---
 
 ## 🚀 Opportunities
 
-- Перенаправление трафика отдельных доменов через VPN.
-- Поддержка нескольких политики и маршрутизации в разные туннели.
-- Поддержка IPv6 и ip6tables (в Neo).
-- Настройка через Web-интерфейс или вручную.
-- Поддержка мульти-WAN и агрегации каналов.
-- Защищенные DNS через TLS.
-- Возможность суммирования пропускной способности каналов.
-- Перенаправление отдельных доменов через разные VPN.
-- Совместимость с WARP.
-- Фильтрация рекламы (в Classic).
+- Redirect traffic of individual domains via VPN.
+- Supports multiple policies and routing to different tunnels.
+- IPv6 and ip6tables support (in Neo).
+- Configuration via Web interface or manually.
+- Supports multi-WAN and link aggregation.
+- Secure DNS over TLS.
+- Possibility of summing channel capacity.
+- Redirect individual domains through different VPNs.
+- WARP compatible.
+- Ad filtering (in Classic).
 
 ---
 
@@ -26,12 +26,12 @@
 
 ### 🔹 Classic
 
-- Простота установки и управления.
-- Управление подключениями через Web-интерфейс Keenetic.
-- Редактирование списков доменов в Web-интерфейсе RydraRoute.
-- Поддержка до 3х предустановленных политик.
-- Интеграция IPset с AdGuard Home.
-- Подходит для большинства пользователей.
+- Easy to install and manage.
+- Manage connections via the Keenetic web interface.
+- Editing domain lists in the RydraRoute Web interface.
+- Supports up to 3 preset policies.
+- IPset integration with AdGuard Home.
+- Suitable for most users.
 
 [Подробнее →](https://github.com/Ground-Zerro/HydraRoute/tree/main/Classic)
 
@@ -39,36 +39,36 @@
 
 ### 🔸 Neo
 
-- Для продвинутых пользователей.
-- Не требует отключения системного DNS.
-- Пользователь сам задаёт названия и количество политик.
-- Полная поддержка IPv6.
+- For advanced users.
+- Does not require system DNS to be disabled.
+- The user himself sets the names and number of policies.
+- Full IPv6 support.
 
 [Подробнее →](https://github.com/Ground-Zerro/HydraRoute/tree/main/Neo)
 
-⚠️ *Neo — это концепт и подтверждение жизнеспособности подхода. Поддержка ограничена.*
+⚠️ *Neo is a concept and proof of the viability of the approach. Support is limited.*
 
 ---
 
 ## 📋 Requirements
 
-- Роутер с KeenOS
-- Entware (установлен и настроен)
-- Настроенное VPN-подключение (WireGuard, OpenVPN, etc.)
-- Установленный `curl`
+- Router with KeenOS
+- Entware (installed and configured)
+- Configured VPN connection (WireGuard, OpenVPN, etc.)
+- Installed `curl`
 
 ---
 
 ## 🧭 Plans for the future
 
-- Поддержка vless
+- vless support
 - Интеграция с [zapret](https://github.com/bol-van/zapret)
-- Обновления из WebUI
+- Updates from WebUI
 
 ---
 
 ## ☕ Support
 
-Если проект оказался Вам полезен — можно поддержать автора:
+If the project was useful to you, you can support the author:
 
 - [Поддержать на Boosty](https://boosty.to/ground_zerro)

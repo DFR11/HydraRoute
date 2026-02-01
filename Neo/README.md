@@ -1,47 +1,47 @@
 # HydraRoute Neo
 
-**HydraRoute Neo** — следующая ступень развития HydraRoute.
+**HydraRoute Neo** is the next stage in the development of HydraRoute.
 
 ---
 
 ## 📚 Table of contents
 
-- [🚀 Что умеет Neo?](#-что-умеет-neo)
-- [📋 Системные требования](#-системные-требования)
-- [📁 Конфигурация](#-конфигурация)
+- [🚀 What can Neo do?](#-what-neo-can-do)
+- [📋 System requirements](#-system-requirements)
+- [📁 Configuration](#-configuration)
 - [🌐 IPv6](#-ipv6)
-- [🔧 Управление](#-управление)
-- [🔍 Проверка и отладка](#-проверка-и-отладка)
-- [💾 Установка](#-установка)
-- [🔀 Многотуннельность](#-многотуннельность)
-- [🧬 Суммирование пропускной способности](#-суммирование-пропускной-способности)
-- [🔄 Обновление](#-обновление)
-- [❌ Удаление](#-удаление)
-- [⚙️ Принципы и этапы работы](#️-принципы-и-этапы-работы)
+- [🔧 Control](#-control)
+- [🔍 Checking and Debugging](#-checking-and-debugging)
+- [💾 Installation](#-installation)
+- [🔀 Multitunneling](#-multitunneling)
+- [🧬Bandwidth summation](#-bandwidth summation)
+- [🔄 Update](#-update)
+- [❌ Deletion](#-deletion)
+- [⚙️ Principles and stages of work](#️-principles-and-stages-of-work)
 - [☕ Donate](#-donate)
-- [⚠️ Дисклеймер](#️-дисклеймер)
+- [⚠️ Disclaimer](#️-disclaimer)
 
 ---
 
 ## 🚀 What can Neo do?
 
-Neo поддерживает все возможности классической версии, а также:
+Neo supports all the features of the classic version, plus:
 
-- **Не требует отключения системного DNS-сервера**.
-- **Пользователь сам задаёт имена и количество политик**.
-- **Поддержка IPv6 (включая ipset и ip6tables)**.
+- **Does not require disabling the system DNS server**.
+- **The user himself sets the names and number of policies**.
+- **IPv6 support (including ipset and ip6tables)**.
 
-> ⚠️ Проект представлен как концепт и служит для подтверждения жизнеспособности идеи, не являясь законченным продуктом.
-> Техническа поддержка - **не предусмотрена**.
+> ⚠️ The project is presented as a concept and serves to confirm the viability of the idea, without being a finished product.
+> Technical support - **not provided**.
 
 ---
 
 ## 📋 System requirements
 
-Для установки и работы HydraRoute Neo необходимо:
+To install and operate HydraRoute Neo you need:
 
 - Роутер Keenetic с установленным [Entware](https://help.keenetic.com/hc/ru/articles/360021214160-Установка-системы-пакетов-репозитория-Entware-на-USB-накопитель)
-- Установленный пакет `curl`:
+- Installed `curl` package:
   ```
   opkg install curl
   ```
@@ -53,21 +53,21 @@ Neo поддерживает все возможности классическ�
 ### 📄 Domains file:
 `/opt/etc/HydraRoute/domain.conf`
 
-Формат:
+Format:
 ```
 example.com,domain.net/PolicyName
 google.com,youtube.com/Warp
 ```
 
-- Разделитель — **запятая**.
-- После слеша — **имя политики**.
-- Пробелы в строках — **не допускаются**.
-- Домены в разных строках **не должны пересекаться**.
+- The separator is **comma**.
+- After the slash - **policy name**.
+- Spaces in lines are **not allowed**.
+- Domains in different lines **must not intersect**.
 
 ### ⚙️ Neo configuration:
 `/opt/etc/HydraRoute/hrneo.conf`
 
-Конфигурация по умолчанию:
+Default configuration:
 ```
 watchlistPath=/opt/etc/HydraRoute/domain.conf
 interfaceName=br0
@@ -76,36 +76,36 @@ log=false
 logfile=/opt/var/log/hrneo.log
 ```
 
-- `watchlistPath` — полный путь к файлу со списком доменов.
-- `interfaceName` — системный интерфейс для отслеживания. Укажите `any`, если нужно отслеживать все. Менять интерфейс **не рекомендуется**.
-- `reconnect` — закрывать существующие подключения к IP при первом его добавлении в ipset: `true`, `false`.
-- `log` — уровень логирования: `console`, `file`, `false`. Включать лог без целей отладки **не рекомендуется**.
-- `logfile` — путь к лог-файлу, если `log=file`.
+- `watchlistPath` - full path to the file with the list of domains.
+- `interfaceName` is the system interface for tracking. Specify `any` if you want to track everything. Changing the interface is **not recommended**.
+- `reconnect` - close existing connections to an IP when it is first added to ipset: `true`, `false`.
+- `log` — logging level: `console`, `file`, `false`. Enabling the log without debugging purposes is **not recommended**.
+- `logfile` — path to the log file, if `log=file`.
 
 ---
 
 ## 🌐 IPv6
 
-Поддержка IPv6 имеется.
-Если не используете — отключите IPv6 в настройках подклюения провайдера и/или VPN соединения.  
+IPv6 support is available.
+If you don’t use it, disable IPv6 in the connection settings of your provider and/or VPN connection.
 👉 Для работы [IPv6 через VPN](https://yandex.ru/search/?text=Для+работы+IPv6+через+VPN&clid=6799014&banerid=6500000000&win=672&lr=79) необходимо соблюдение всех четырех условий одновременно:  
-- ipv6 должен быть у основного провайдера
-- ipv6 должен быть у VPN сервера
-- ipv6 должен быть у `WG` (`PPTP`, `L2TP`, `OpenVPN` etc.) пира
-- ipv6 маршрутизация должна быть настроена на VPS
+- ipv6 must be from the main provider
+- The VPN server must have ipv6
+- ipv6 must be on the `WG` (`PPTP`, `L2TP`, `OpenVPN` etc.) peer
+- ipv6 routing must be configured on the VPS
 
 ---
 
 ## 🔧 Management
 
-| Команда       | Описание         |
+| Team | Description |
 |:--------------|:-----------------|
-| `neo status`  | Проверить статус |
-| `neo start`   | Запуск           |
-| `neo stop`    | Остановка        |
-| `neo restart` | Перезапуск       |
+| `neo status` | Check status |
+| `neo start` | Launch |
+| `neo stop` | Stop |
+| `neo restart` | Restart |
 
-Альтернативно:
+Alternatively:
 ```
 /opt/etc/init.d/S99hrneo status|start|stop|restart
 ```
@@ -116,7 +116,7 @@ logfile=/opt/var/log/hrneo.log
 
 ### 🚦 iptables:
 
-Проверить наличие правил в iptables
+Check for rules in iptables
 ```
 iptables -t mangle -S | grep -E 'HydraRoute'       # IPv4
 ip6tables -t mangle -S | grep -E 'HydraRoute'      # IPv6
@@ -124,7 +124,7 @@ ip6tables -t mangle -S | grep -E 'HydraRoute'      # IPv6
 
 ### 🗃️ ipset:
 
-Проверить наполняется ли IPset
+Check if IPset is full
 ```
 ipset list HydraRoute        # IPv4
 ipset list HydraRoutev6      # IPv6
@@ -132,14 +132,14 @@ ipset list HydraRoutev6      # IPv6
 
 ### 🧹 Cleaning ipset:
 
-Очистить ipset от накопленных IP-адресов
+Clear ipset from accumulated IP addresses
 ```
 ipset flush HydraRoute        # IPv4
 ipset flush HydraRoutev6      # IPv6
 ```
-  - или протсо [перезапустить HydraRoute Neo](#-управление)
+  - or protso [restart HydraRoute Neo](#-control)
 
-> 👉 Замените `HydraRoute` на **название Вашей политики**
+> 👉 Replace `HydraRoute` with **name of your policy**
 
 ---
 
@@ -150,35 +150,35 @@ ipset flush HydraRoutev6      # IPv6
 curl -Ls "https://ground-zerro.github.io/release/keenetic/install-feed.sh" | sh
 ```
 
-2. 🚀 Установить HydraRoute Neo:
+2. 🚀 Install HydraRoute Neo:
 ```
 opkg install hrneo
 ```
 
-> 👉 HydraRoute Neo готов к работе сразу после установки. Служба запускается автоматически.
+> 👉 HydraRoute Neo is ready to work immediately after installation. The service starts automatically.
 
 ---
 
 ## 🔀 Multi-tunneling
 
-Для перенаправления отдельных доменов в разные отдельные туннели, создайте отдельные  
-строки в `domain.conf` с разными именами политик (например, `/Warp`, `/Obhod`, `/Zakop` и т.д.).
+To redirect individual domains to different separate tunnels, create separate
+lines in `domain.conf` with different policy names (for example, `/Warp`, `/Obhod`, `/Zakop`, etc.).
 
-После [перезапуска службы HydraRoute Neo](#-управление) политика будет создана автоматически.  
-👉 В Web-интерфейсе роутера нужно указать и активировать требуемое подключение для новой политики.
+After [restarting the HydraRoute Neo service](#-management), the policy will be created automatically.
+👉 In the router's Web interface, you need to specify and activate the required connection for the new policy.
 
 ---
 
 ## 🧬 Capacity summing
 
 В одной политике можно указать несколько VPN-подключений одновременно, активировав [режим многопутевой маршрутизации Keenetic](https://help.keenetic.com/hc/ru/articles/7490633500572-Многопутевая-передача-суммирование-пропускной-способности-нескольких-интернет-соединений).  
-👉 В этом режиме, все включенные в политику подключения передают трафик агрегируя пропускную способности каналов.
+👉 In this mode, all connections included in the policy transmit traffic by aggregating channel bandwidth.
 
 ---
 
 ## 🔄 Update
 
-Конмада для обновления установленных пакетов:
+Conmada for updating installed packages:
 ```
 opkg update && opkg upgrade
 ```
@@ -187,12 +187,12 @@ opkg update && opkg upgrade
 
 ## ❌ Removal
 
-Стандартно:
+Standard:
 ```
 opkg remove hrneo
 ```
 
-Полное удаление (в т.ч. файлы, логи etc.) c откатом всех изменений в системе к стандартным:
+Complete deletion (including files, logs, etc.) with a rollback of all changes in the system to standard:
 ```
 curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 ```
@@ -201,29 +201,29 @@ curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 
 ## ⚙️ Principles and stages of work
 
-1. **Загрузка конфигурации**  
-   Загрузка настроек: интерфейс, лог-файл, домены.
+1. **Loading configuration**
+Loading settings: interface, log file, domains.
 
-2. **Формирование IPSET-групп**  
-   Создание ipset-групп под IPv4/IPv6 по каждому домену.
+2. **Formation of IPSET groups**
+Creation of ipset groups for IPv4/IPv6 for each domain.
 
-3. **Создание политик маршрутизации**  
-   Проверка и автоматическое создание политик через `ndmc`.
+3. **Creating routing policies**
+Checking and automatic creation of policies via `ndmc`.
 
-4. **Маршрутизация трафика**  
-   Установка правил iptables/ip6tables с использованием `CONNMARK`.
+4. **Traffic routing**
+Setting iptables/ip6tables rules using `CONNMARK`.
 
-5. **Анализ DNS-запросов**  
-   Отслеживание DNS и добавление IP-адресов доменов в ipset при совпадении.
+5. **Analysis of DNS queries**
+Monitor DNS and add domain IP addresses to ipset if there is a match.
 
-6. **Контроль и настройка**  
-   Закрытие сессий, поддержка и обновление правил маршрутизации, ведение лога, настройка через конфиг.
+6. **Control and configuration**
+Closing sessions, maintaining and updating routing rules, logging, configuration via config.
 
 ---
 
 ## ☕ Donate
 
-Если HydraRoute Neo оказался полезным — можно отблагодарить автора:
+If HydraRoute Neo was useful, you can thank the author:
 
 - [Угостив](https://boosty.to/ground_zerro/donate) кружечкой горячего какао 😋
 - Став [подписчиком](https://boosty.to/ground_zerro)
@@ -232,4 +232,4 @@ curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
 
 ## ⚠️ Disclaimer
 
-> Автор не несёт ответственности за любые последствия. Используя данный скрипт, вы действуете на свой страх и риск.
+> The author is not responsible for any consequences. Using this script, you act at your own peril and risk.
