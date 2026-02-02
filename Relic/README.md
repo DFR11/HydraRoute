@@ -8,7 +8,7 @@
 1. Connect to the router via SSH (to Entware).
 2. Run the command:
 ```
-curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic/hydraroute.sh" > /opt/tmp/hydraroute.sh && chmod +x /opt/tmp/hydraroute.sh && /opt/tmp/hydraroute.sh
+curl -L -s "https://github.com/DFR11/HydraRoute/raw/refs/heads/main/Relic/hydraroute.sh" > /opt/tmp/hydraroute.sh && chmod +x /opt/tmp/hydraroute.sh && /opt/tmp/hydraroute.sh
 ```
 3. Select VPN from the list.
 
@@ -48,5 +48,5 @@ curl -L -s "https://github.com/Ground-Zerro/HydraRoute/raw/refs/heads/main/Relic
 
 ## Removal:
 ```
-curl -Ls "https://ground-zerro.github.io/release/keenetic/hr-uninstall.sh" | sh
+curl -Ls "https://DFR11.github.io/release/keenetic/hr-uninstall.sh" | sh
 ```
